@@ -8,8 +8,8 @@ readMSL <- function(file.name = character(), path = getwd(), Save = FALSE) {
         stop("Name of the MSL file should be provided!")
     }
     
-    file.name <- list.files(path = path, pattern = ".MSL", full.names = FALSE)
-    
+    file.name <- file.path(path, file.name)
+
     if (!length(file.name)) {
         stop("No MSL file found in the provided path!")
     }
