@@ -52,7 +52,7 @@ plotEIC <- function(peakEIC = list(), fig.name = character()) {
     }
     
     # check if the max ylim is much larger than the max peak apex
-    if (ggplot_build(mainPlot)$panel$ranges[[1]]$y.range[2] > 2*maxIntApex) {
+    if (ggplot_build(mainPlot)$layout$panel_ranges[[1]]$y.range[2] > 2*maxIntApex) {
         mainPlot <- mainPlot + coord_cartesian(ylim = c(0, 1.5*maxIntApex))
     }
     

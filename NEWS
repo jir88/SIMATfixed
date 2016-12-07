@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.7.1
+-------------------------
+ o bug related to ggplot package fixed [2016-12-07 Wed]
+
 CHANGES IN VERSION 0.99.3
 -------------------------
  o exporting single functions instead of pattern [2015-03-12 Thu]
