@@ -1,6 +1,14 @@
-CHANGES IN VERSION 1.7.1
+CHANGES IN VERSION 1.8.1
 -------------------------
- o bug related to ggplot package fixed [2016-12-07 Wed]
+ o fix compatibility issues with new ggplot package [2018-08-02 Wed]
+
+CHANGES IN VERSION 1.6.1
+-------------------------
+ o a new function to write the analysis results in a table [2016-12-07 Wed]
+
+CHANGES IN VERSION 0.99.4
+-------------------------
+ o fixing minor issues in the vignette [2015-04-01 Wed]
 
 CHANGES IN VERSION 0.99.3
 -------------------------
