@@ -2,7 +2,7 @@
 
 getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(), 
                    sp0 = numeric(), rt0 = numeric(), drt = 10/60, dsc = 10/2, 
-                   ri0 = 0, weight = 2/3, deltaRI = 20, calcRI = NULL) {
+                   ri0 = 0, weight = 2/3, deltaRI = 20, calibRI = NULL) {
     
     ## check if minimum required inputs are present
     if (missing(Run) | missing(ms0) | missing(sp0) | missing(rt0)) {
@@ -12,6 +12,11 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
     
     ## function to find the peak locations
     findPeaks <- function (x, Threshold = 0, delta = 3) {
+        
+        span <- 0.05
+        t <- 1:length(x)
+        x <- suppressWarnings(loess(x ~ t, span = span)$fitted)
+        
         pks <- which(diff(sign(diff(x,na.pad = FALSE)),na.pad = FALSE) < 0) + 2
         
         if (!missing(Threshold)) {
@@ -31,8 +36,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
         # set dms as the tolerance of mass (in Dalton)
     dms <- 0.4
     # number of initially detected peaks and the top ones in the EIC
-    nPeaks <- 10
-    topPeaks <- 5
+    topPeaks <- 20
     # relative intensity of the peak to the highest intensity peak for selection
     # a peak should be at least 1/RelativeInt of the highest peak to be selected
     relativeInt <- 1000
@@ -40,9 +44,17 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
     ## get run info, i.e. scans (mass, intensity pairs) and retention times
     scans <- Run$pk
     rt <-Run$rt
-        
+    
     ## scan index and rt values for search window around the peak
-    sc <- which(rt/60 < rt0 + drt & rt/60 > rt0 - drt)
+    # expected RT based on RI if provided
+    if (is.null(calibRI)) {
+        expRT <- rt0    
+    } else {
+        expRT <- calibRI(ri = ri0)
+    }
+    
+        
+    sc <- which(rt/60 < expRT + drt & rt/60 > expRT - drt)
     RT <- rt[sc]
     # extract scans and their mass and intensities from the run
     p <- scans[sc]
@@ -68,7 +80,8 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
     
     # locate the top candidate peak
 
-    scPeaks <- findPeaks(EIC[1, ])
+    scPeaks <- findPeaks(EIC[1, ], Threshold = min(EIC[1, ])/20)
+    scPeaks <- scPeaks[scPeaks > 0]
     indApex <- scPeaks[sort.int(EIC[1, scPeaks], decreasing = TRUE, 
                                                     index.return = TRUE)$ix]
     topPeaks <- min(topPeaks, length(scPeaks))
@@ -91,29 +104,31 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
         }
         
         # get qualifier fragments data
-        for (fr in 2:length(ms0)) {
-            for (s in 1:length(sc)) {
-                indMS <- which(abs(p[[s]][,"mz"] - ms0[fr]) <= dms)
-                ind <- which.min(abs(p[[s]][indMS, "mz"] - ms0[fr]))
+        if (length(ms0) > 1) {
+            for (fr in 2:length(ms0)) {
+                for (s in 1:length(sc)) {
+                    indMS <- which(abs(p[[s]][,"mz"] - ms0[fr]) <= dms)
+                    ind <- which.min(abs(p[[s]][indMS, "mz"] - ms0[fr]))
+                    
+                    if (length(ind)) {
+                        EIC[fr, s] <- p[[s]][indMS[ind], "intensity"]
+                    } else {
+                        EIC[fr, s] <- 0
+                    }                      
+                }
                 
-                if (length(ind)) {
-                    EIC[fr, s] = p[[s]][indMS[ind], "intensity"]
-                } else {
-                    EIC[fr, s] = 0
-                }                      
-            }
-            
-            baseLine[fr] <- min(EIC[fr, ])
-            area[fr] <- sum(EIC[fr, indMin:indMax] - baseLine[fr])
-            
-            if (length(locs)) {
-                intApex[fr] <- EIC[fr, locs[i]]
+                baseLine[fr] <- min(EIC[fr, ])
+                area[fr] <- sum(EIC[fr, indMin:indMax] - baseLine[fr])
+                
+                if (length(locs)) {
+                    intApex[fr] <- EIC[fr, locs[i]]
+                }
             }
         }
         
         # check similarity score of the candidates and the relative intensities
         # no RI calibration
-        if (is.null(calcRI)) {
+        if (is.null(calibRI)) {
             ri <- 0
             
             tempScoreApex <- getScore(trueSpec = intApex, refSpec = sp0)
@@ -121,7 +136,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
         }
         # calibration, calcute RI
         else {
-            ri <- calcRI(RT[locs[i]]/60)
+            ri <- calibRI(rt = RT[locs[i]]/60)
             
             tempScoreApex <- getScore(trueSpec = intApex, refSpec = sp0, 
                                     trueRI = ri, refRI = ri0, deltaRI = deltaRI)
@@ -160,6 +175,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
     peakEIC$ms <- ms0
     peakEIC$sp <- sp0
     peakEIC$rt0 <- rt0
+    peakEIC$ri0 <- ri0
     peakEIC$compound <- compound
         
     # return the output object

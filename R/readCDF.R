@@ -23,7 +23,8 @@ readCDF <- function(path = getwd()) {
         
         Run <- list(rt = rt, sc = sc, tic = tic)
         Run$pk <- pk
-        
+        Run$file.name <- file.name[i]
+            
         setwd(path.current)
         saveRDS(Run, file = paste(file.name[i], ".rds", sep = ""))
         #save(Run, file=paste(file.name[i], ".rda", sep=""), compress="xz")

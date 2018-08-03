@@ -108,7 +108,7 @@ optFrag <- function(Targets = list(), Library = list(), target.table = list(),
             quantFrag[i] <- 1
             sortedFrag[[i]] <- 1:length(target.table$ms[[i]])
             
-            # skip the ith iteraton
+            # skip the rest of ith iteraton
             next
         }
         

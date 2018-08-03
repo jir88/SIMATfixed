@@ -20,7 +20,7 @@ plotEIC <- function(peakEIC = list(), fig.name = character()) {
     rtApex <- peakEIC$rtApex
     rt0 <- peakEIC$rt0
     maxIntApex <- max(peakEIC$intApex)
-    
+        
     
     ## initialization
     # to get rid of the 'no visible binding for global variable' notes.
@@ -28,14 +28,18 @@ plotEIC <- function(peakEIC = list(), fig.name = character()) {
         
     
     ## create the main EIC plot
+    Title <- paste(peakEIC$compound, ', Score_Apex = ', 
+                   round(peakEIC$scoreApex, 2), 'Score_Area = ', 
+                   round(peakEIC$scoreArea, 2))
+    
     df <- data.frame(t(eic))
     Spc <- stack(df)
     Spc$Time <- rep(rt, dim(eic)[1], dim(eic)[2])
     colnames(Spc)[1:2] <- c("Intensity", "Fragment")
     Spc[, 2] <- rep(as.character(ms), each = length(rt))
     mainPlot <- ggplot(data = Spc, aes(x = Time, y = Intensity, color = Fragment)) +
-                    geom_line(size = 1.2) + theme_bw() +
-                    ggtitle(peakEIC$compound) +
+                    geom_line(size = 1.2) + theme_bw() + xlab('Time (min)') +
+                    ggtitle(Title) +
                     theme(plot.title = element_text( size=20)) +
                     theme(plot.title = element_text(vjust=2)) +                            
                     geom_vline(xintercept = rtApex, color = "red", 
@@ -52,7 +56,7 @@ plotEIC <- function(peakEIC = list(), fig.name = character()) {
     }
     
     # check if the max ylim is much larger than the max peak apex
-    if (ggplot_build(mainPlot)$layout$panel_ranges[[1]]$y.range[2] > 2*maxIntApex) {
+    if (layer_scales(mainPlot)$y$range$range[2] > 2*maxIntApex) {
         mainPlot <- mainPlot + coord_cartesian(ylim = c(0, 1.5*maxIntApex))
     }
     
@@ -74,8 +78,8 @@ plotEIC <- function(peakEIC = list(), fig.name = character()) {
     pSpc$Time <- rep(Time, dim(spc)[1], dim(spc)[2])
     colnames(pSpc)[1:2] <- c("Intensity", "Fragment")
     pSpc[, 2] <- rep(as.character(ms), each = length(Time))
-    subPlot <- ggplot(data = pSpc, aes(x = Time, y = Intensity, color = Fragment)) +
-                        geom_line(size = 0.5) + theme_bw() +
+    subPlot <- ggplot(data = pSpc, aes(x = Time, y = Intensity, 
+                        color = Fragment)) + geom_line(size=0.5) + theme_bw() +
                         theme(legend.position = "none", aspect.ratio = 1,
                                 axis.title = element_blank(), 
                                 axis.text = element_blank(),

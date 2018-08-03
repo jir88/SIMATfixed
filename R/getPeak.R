@@ -2,7 +2,7 @@
 
 getPeak <- function(Run = list(), file.name = character(), Targets = list(), 
                     target.file.name = character(), drt = 10/60, dsc = 14/2, 
-                    weight = 2/3, deltaRI = 20, calcRI = NULL, 
+                    weight = 2/3, deltaRI = 20, calibRI = NULL, 
                     rt.sort = FALSE) {
     
     ## Initialization
@@ -43,6 +43,12 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
         sp[[j]] <- sp[[j]][indFrag]
     }
     
+    if (!is.list(ms)) {
+        ms <- list(ms)
+        sp <- list(sp)
+    }
+    
+    
     
     ## get EIC data of each run per target
 
@@ -54,12 +60,15 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
         if (missing(file.name)) {
             stop("When \"Run\" is not provided, the \"file.name\" is required!")    
         }            
-        num.runs <- length(file.name) 
+        num.run <- length(file.name) 
         
         # initialize the output variable
         dsPeaks <- list()
       
-        for (i in 1:num.runs) {
+        for (i in 1:num.run) {
+            # initialize
+            runPeaks <- list()
+            
             # load related RData file for each run
             Run <- readRDS(file = paste(file.name[i], '.rds', sep = ""))
         
@@ -69,13 +78,16 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
                                   ms0 = ms[[j]], sp0 = sp[[j]], rt0 = rt[j], 
                                   drt = drt, dsc = dsc, ri0 = ri[j], 
                                   weight = weight, deltaRI = deltaRI,
-                                  calcRI = calcRI)
+                                  calibRI = calibRI)
                 runPeaks[j] <- list(peakEIC)
             }
         
-        dsPeaks[i] <- list(runPeaks)
-        
+            dsPeaks[i] <- list(runPeaks)
+            
+            cat(paste('\n\t', file.name[i], 'done.\n', sep = ' '))
         }
+        
+        names(dsPeaks) <- file.name
 
     } else {
         # call getEIC to find the EIC of each target
@@ -86,11 +98,12 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
                               ms0 = ms[[j]], sp0 = sp[[j]], rt0 = rt[j], 
                               drt = drt, dsc = dsc, ri0 = ri[j], 
                               weight = weight, deltaRI = deltaRI, 
-                              calcRI = calcRI)
+                              calibRI = calibRI)
             runPeaks[j] <- list(peakEIC)
         }
         
-        dsPeaks <- runPeaks
+        dsPeaks <- list(runPeaks)
+        names(dsPeaks) <- Run$file.name
     }
 
     ## output the results 
