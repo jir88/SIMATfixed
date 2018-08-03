@@ -9,8 +9,6 @@
 % The is for R CMD check, which finds it in spite of the "%", and also for
 % automatic creation of links in the HTML documentation for the package:
 
-%\VignetteIndexEntry{UNDO Demo}
-
 \begin{document}
 
 %%%%%%%% Setup
@@ -22,7 +20,7 @@
 \setkeys{Gin}{width=\textwidth}
 
 % R code and output non-italic
-% inspired from Ross Ihaka http://www.stat.auckland.ac.nz/~ihaka/downloads/Sweave-customisation.pdf
+% inspired by Ross Ihaka http://www.stat.auckland.ac.nz/~ihaka/downloads/Sweave-customisation.pdf
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{xleftmargin=0em}
 \DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=0em}
 \DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=0em}
@@ -162,30 +160,30 @@ runPeaks <- getPeak(Run = Run, Targets = Targets)
 length(runPeaks)
 
 # check the fields for each peak
-names(runPeaks[[1]])
+names(runPeaks[[1]][[1]])
 
 # area of the EIC of the first target
-runPeaks[[1]]$area
+runPeaks[[1]][[1]]$area
 @
 
 Following that, the extracted ion chromatogram (EIC) of the retrieved peaks can be visualized using \texttt{plotEIC} function:
 
 <<plotEIC,fig=TRUE>>=
 # plot the EIC of the first peak (target) on the list
-plotEIC(peakEIC = runPeaks[[1]])
+plotEIC(peakEIC = runPeaks[[1]][[1]])
 @
 
 However, the above is done without retention time calibration. To adjust for RI, first we call \texttt{getRI} to create a function which can be used to calculate the RI given the retention time:
 
 <<getRI>>=
 # create the RI calibration function
-calcRI <- getRI(RItable)
+calibRI <- getRI(RItable)
 
 # calculate the RI of an RT = 12.32min
-calcRI(12.32)
+calibRI(12.32)
 
 # get the peaks for this run corresponding to Targets using RI calibration
-runPeaksRI <- getPeak(Run = Run, Targets = Targets, calcRI = calcRI)
+runPeaksRI <- getPeak(Run = Run, Targets = Targets, calibRI = calibRI)
 @
 
 It is informative to check the scores for the detected targets. This can be done by using a specific target in an individual run, or by finding the scores of all targets at once and looking at the histogram of the scores:
