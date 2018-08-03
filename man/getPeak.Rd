@@ -9,7 +9,7 @@
 \usage{
 getPeak(Run = list(), file.name = character(), Targets = list(), 
             target.file.name = character(), drt = 10/60, dsc = 14/2, 
-                weight = 2/3, deltaRI = 20, calcRI = NULL, rt.sort = FALSE)
+                weight = 2/3, deltaRI = 20, calibRI = NULL, rt.sort = FALSE)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -30,7 +30,7 @@ getPeak(Run = list(), file.name = character(), Targets = list(),
     
     \item{deltaRI}{a numeric value for the penalty on the retention index similarity score.}
     
-    \item{calcRI}{a function name to calculate RI based on RI calibration information, can be obtained by \code{getRI} function, optional.}
+    \item{calibRI}{a function to calculate retention index based on RI calibration information, can be obtained by \code{getRI} function, optional.}
     
     \item{rt.sort}{a boolean value to sort the targets based on retention time before performing peak detection, optional}
 }
@@ -38,7 +38,7 @@ getPeak(Run = list(), file.name = character(), Targets = list(),
 \details{This function performs peak detection for a list of targets in several runs by calling \code{getEIC}. The list of targets should include the information on retention times, retention indexes, mass and intensity of the fragments. It can also include the name of the targets, i.e. compounds.
 }
 
-\value{If multiple runs are provided, a list of list objects, one for each run. If a single run is provided, a list containing peaks information, i.e. the same as \code{getEIC} output.}
+\value{a list of list objects, one for each run. Each inner list represents a single run containing peaks information, i.e. the same as \code{getEIC} output.}
 
 \seealso{\code{\link{getEIC}}}
 

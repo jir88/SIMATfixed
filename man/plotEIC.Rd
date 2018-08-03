@@ -44,5 +44,5 @@ plotEIC(peakEIC = list(), fig.name = character())
     runPeaks <- getPeak(Run = Run, Targets = Targets)
     
     # plot the EIC of the first target
-    plotEIC(runPeaks[[1]])
+    plotEIC(runPeaks[[1]][[1]])
 }
