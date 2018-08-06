@@ -3,7 +3,10 @@ import(mzR)
 import(ggplot2)
 import(grid)
 import(reshape2)
-
+importFrom("grDevices", "dev.copy", "dev.off", "pdf")
+importFrom("stats", "dnorm", "loess", "rt")
+importFrom("utils", "read.csv", "stack", "write.csv")
+  
 export(getEIC,
        getPeak,
        getPeakScore,
@@ -18,4 +21,5 @@ export(getEIC,
        putTargetTable,
        readCDF,
        readMSL,
-       writeMSL)
+       writeMSL,
+       writeResult)
