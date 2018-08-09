@@ -1,7 +1,6 @@
 ## This function output the data processing results
 
-writeResult <- function(runPeaks = list(), output.file.name = 'results.csv', 
-                         output.file.path = getwd()) {
+writeResult <- function(runPeaks = list(), output.file.name = 'results.csv') {
     
     if (missing(runPeaks)) {
         stop('Please provide the run peaks object!')
@@ -69,11 +68,6 @@ writeResult <- function(runPeaks = list(), output.file.name = 'results.csv',
     # integrate the results in one table
     results <- cbind(results, DF)
         
-    # write results to a csv file to the provided path
-    current.path <- getwd()
-    setwd(output.file.path)
-    
+    # write results to a csv file to the provided file name
     write.csv(results, file = output.file.name)
-    
-    setwd(current.path)
 }

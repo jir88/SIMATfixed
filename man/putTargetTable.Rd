@@ -6,14 +6,14 @@
 }
 
 \usage{
-putTargetTable(target.table = list(), target.table.file.name = character())
+putTargetTable(target.table = list(), target.table.file = character())
 }
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
     \item{target.table}{a list containing the target table information, e.g. obtained using \code{getTargetTable}.}
     
-    \item{target.table.file.name}{a string including the full name of a text file including the target compounds information.}    
+    \item{target.table.file}{a string including the full name of a text file including the target compounds information.}    
 }
 
 \details{This function writes the target table information in a csv file so the user can open the results in text and table editors.
@@ -38,5 +38,5 @@ putTargetTable(target.table = list(), target.table.file.name = character())
     
     # write the subset into a csv file
     putTargetTable(target.table = target.table.sub, 
-                    target.table.file.name = "TargetTableSub.csv")
+                    target.table.file = "TargetTableSub.csv")
 }

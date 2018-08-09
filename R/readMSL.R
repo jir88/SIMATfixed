@@ -25,13 +25,9 @@ readMSL <- function(file.name = character(), path = getwd(), Save = FALSE) {
     ## initialization
     ms <- list(); sp <- list(); ri <- numeric(); rt <- numeric()
     compound <- character(); spec <- 0
-    
-    # path processing
-    path.current <- getwd()
-    setwd(path)
-    
+
     # read the target file line by line
-    Lines <- readLines(file.name)
+    Lines <- readLines(file.path(path, file.name))
     #Lines <- c(Lines, "")
     # get the number of rows
     L <- length(Lines)
@@ -94,7 +90,6 @@ readMSL <- function(file.name = character(), path = getwd(), Save = FALSE) {
     
     ## saving and returning the result
     if (Save) {
-        setwd(path.current)        
         file.name <- paste(file.name, ".rds", sep = "")
         saveRDS(Targets, file = file.name, compress = "xz")
     } 

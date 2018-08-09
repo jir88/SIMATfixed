@@ -8,8 +8,8 @@
 }
 
 \usage{
-getTarget(Method = "target", target.file.name = character(), 
-            library.file.name = character(), path = getwd(), 
+getTarget(Method = "target", target.file = character(), 
+            library.file = character(), path = getwd(), 
             library.path = getwd(), Library = list(), target.table = list(),
             deltaRI = numeric(), deltaRT = numeric(), Save = FALSE)}
 
@@ -17,7 +17,7 @@ getTarget(Method = "target", target.file.name = character(),
 \arguments{
     \item{Method}{a srting with three possible values: "target", "library", and "combined". The "target" case means the user only provides a \code{.MSL} file as a list of targets. In the "library" mode, the user provides only a library in \code{.MSL} format, but it is required to provide a \code{target.table} to determine the name of the targets and the selected mass. The \code{target.table} can be obtained by using \code{getTargetTable} function. In the "combined" method, the user provides a list of targets as \code{target.table} and a library in \code{.MSL} format where the fragments are selected using optimization.}
     
-    \item{target.file.name}{a string including the full name of a \code{.MSL} file including the target compounds information.}
+    \item{target.file}{a string including the full name of a \code{.MSL} file including the target compounds information.}
     
     %\item{quantFrag}{a numeric value or vector providing the location of the quantifier fragment in the spectra of all targets, if one single value is provided, or every target, if a vector is provided. This parameter is optional and if it is not provided, the function selects the quantifier fragment automatically.}
     
@@ -25,7 +25,7 @@ getTarget(Method = "target", target.file.name = character(),
     
     %\item{numFrags}{a numeric value or vector to determine the number of fragments measured for each target or all targets, optional}
 
-    \item{library.file.name}{a string including the full name of a \code{.MSL} file including the library compounds information. The library can include background compounds, e.g. an in-house library. A library can also directly imported using the \code{Library} argument.}
+    \item{library.file}{a string including the full name of a \code{.MSL} file including the library compounds information. The library can include background compounds, e.g. an in-house library. A library can also directly imported using the \code{Library} argument.}
     
     \item{path}{a string including the full path to the location of the file.name, optional}
 

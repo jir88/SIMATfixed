@@ -8,16 +8,13 @@
 }
 
 \usage{
-writeResult(runPeaks = list(), output.file.name = 'results.csv', 
-            output.file.path = getwd())
+writeResult(runPeaks = list(), output.file.name = 'results.csv')
 }
 
 \arguments{
     \item{runPeaks}{a list including the analysis results and targets information, e.g. acquired by \code{getPeak} function.}
     
     \item{output.file.name}{a character object, i.e. string, of the name of the output file in csv format.}
-    
-    \item{output.file.path}{a character object, i.e. string, of the path for saving the output file.}
 }
 
 \details{As an input, the \code{runPeaks} object is a list of lists where each list, is the information for one run. The information for each run includes target information, and analysis results, e.g. apex and area location in time and their related intensities as well as estimated RI.

@@ -7,6 +7,6 @@ test_putTargetTable <- function() {
                    "target.table should be a list")    
     
     Table <- list()
-    checkException(putTargetTable(target.table.file.name = Table), 
+    checkException(putTargetTable(target.table.file = Table), 
                    "Please provide a string for the output file name!")    
 }

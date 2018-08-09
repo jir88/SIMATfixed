@@ -2,8 +2,6 @@
 
 readCDF <- function(path = getwd()) {
     
-    path.current <- getwd()
-    
     file.name <- list.files(path = path, pattern = ".CDF", full.names = FALSE)
     
     if (!length(file.name)) {
@@ -12,9 +10,7 @@ readCDF <- function(path = getwd()) {
         
     for (i in 1:length(file.name)) {
         
-        setwd(path)
-        
-        CDFdata <- openMSfile(file.name[i], backend = "netCDF") 
+        CDFdata <- openMSfile(file.path(path, file.name[i]), backend = "netCDF") 
         pk <- peaks(CDFdata)
         hd <- header(CDFdata)
         rt <- hd$retentionTime
@@ -24,8 +20,7 @@ readCDF <- function(path = getwd()) {
         Run <- list(rt = rt, sc = sc, tic = tic)
         Run$pk <- pk
         Run$file.name <- file.name[i]
-            
-        setwd(path.current)
+        
         saveRDS(Run, file = paste(file.name[i], ".rds", sep = ""))
         #save(Run, file=paste(file.name[i], ".rda", sep=""), compress="xz")
     }

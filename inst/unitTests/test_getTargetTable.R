@@ -2,6 +2,5 @@
 
 test_getTargetTable <- function() {
     
-    checkException(getTargetTable(path = getwd()), 
-                   "A target table file is required!")  
+    checkException(getTargetTable(), "A target table file is required!")  
 }

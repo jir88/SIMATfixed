@@ -6,6 +6,6 @@ test_writeResult <- function() {
 #     data(Targets)
 #     runPeaks <- getPeak(Run = Run, Targets = Targets)                                                
 
-    checkException(writeResult(run.name = "myFile.CDF"), 
+    checkException(writeResult(output.file.name = 'results.csv'), 
                    "Please provide the run peaks object!")   
 }

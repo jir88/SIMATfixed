@@ -2,12 +2,12 @@
 #   As MSL files are not in table format, we need to write them line by line
 
 putTargetTable <- function(target.table = list(), 
-                           target.table.file.name = character()) {
+                           target.table.file = character()) {
     
     # check if any required argument is missing
-    if (missing(target.table) | missing(target.table.file.name)) {
+    if (missing(target.table) | missing(target.table.file)) {
         stop("Either the target table or the file name is missing!")
-    } else if (!is.character(target.table.file.name)) {
+    } else if (!is.character(target.table.file)) {
         stop("Please provide a string for the output file name!")
     } else if (!is.list(target.table)) {
         stop("target.table should be a list")
@@ -34,5 +34,5 @@ putTargetTable <- function(target.table = list(),
     }
     
     # write the results to the file
-    writeLines(Lines, con = target.table.file.name)    
+    writeLines(Lines, con = target.table.file)    
 }

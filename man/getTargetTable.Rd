@@ -6,14 +6,12 @@
 }
 
 \usage{
-getTargetTable(target.table.file.name = character(), path = getwd())
+getTargetTable(target.table.file = character())
 }
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-    \item{target.table.file.name}{a string including the full name of a text file including the target compounds information.}
-    
-        \item{path}{a string inlcuding the full path to the target table \code{.txt} file lication, optional}
+    \item{target.table.file}{a string including the full name of a text file including the target compounds information.}
 }
 
 \details{This function gets the targets table from user by reading the targets info including the names of the compounds together with the the mass of selected fragments, the names should be clear enough to be searched by getTarget function when required. Each line of the target table file icludes two keywords, "name", and "mass" or "numfrag", where the full name of the compound comes after "name" and the selected masses after "mass" or number of desired fragments after "numfrag". The "mass" is used when no optimization is expected and the corresponding fragments are defined by users. The "numfrag" is used when the user does not provide the fragments for monitoring and asks them to be selected by optimization. The function is not case-sensitive and the items can be separated by tabs or spaces. Also, it is not required to have the same number of masses for different compounds. The table can be created using any tool with any format, e.g. txt, while it is saved as a text file with a unicode format. Below is an example:
@@ -40,8 +38,8 @@ Name urea mass 66 74 189 190
 \examples{
     # load an example data set
     extdata.path <- system.file("extdata", package = "SIMAT")
+    datafile = file.path(extdata.path, "TargetTable.txt")
     
     # read target table information form file
-    target.table <- getTargetTable(target.table.file.name = "TargetTable.txt", 
-                                                    path = extdata.path)
+    target.table <- getTargetTable(target.table.file = datafile)
 }

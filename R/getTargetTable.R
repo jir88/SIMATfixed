@@ -3,11 +3,10 @@
 # together with the the mass of selected fragments, the names should be clear
 # enough to be searched by getTarget function when required
 
-getTargetTable <- function(target.table.file.name = character(), 
-                           path = getwd()) {
+getTargetTable <- function(target.table.file = character()) {
     
     # check if the target table file is provided
-    if (missing(target.table.file.name)) {
+    if (missing(target.table.file)) {
         stop("A target table file is required!")
     }
     
@@ -21,18 +20,11 @@ getTargetTable <- function(target.table.file.name = character(),
         
     # initialization
     compound <- character(); ms <- list(); numFrag <- numeric()
-    
-    # get the current path
-    path.current <- getwd()
-    setwd(path)
-    
+
     # read the info from file line by line
-    Lines <- readLines(target.table.file.name)
+    Lines <- readLines(target.table.file)
     # Lines <- c(Lines, "")
-    
-    # retain original path
-    setwd(path.current)
-    
+
     # get the total number of rows
     L <- length(Lines)
     # index for compounds
@@ -95,7 +87,6 @@ getTargetTable <- function(target.table.file.name = character(),
             }         
         }     
     }
-        
         
     # ouput the results as a list
     target.table <- list(compound = compound, ms = ms, numFrag = numFrag)

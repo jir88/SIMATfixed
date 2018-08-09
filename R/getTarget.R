@@ -1,7 +1,7 @@
 ## This function reads the targets and gets their info
 
-getTarget <- function(Method = "target", target.file.name = character(),  
-                      library.file.name = character(), path = getwd(),
+getTarget <- function(Method = "target", target.file = character(),  
+                      library.file = character(), path = getwd(),
                       library.path = getwd(), Library = list(), 
                       target.table = list(), deltaRI = numeric(), 
                       deltaRT = numeric(), Save = FALSE) {
@@ -10,11 +10,11 @@ getTarget <- function(Method = "target", target.file.name = character(),
     ## method = target
     if (grepl("target", Method, ignore.case = TRUE)) {
         
-        if (missing(target.file.name)) {
+        if (missing(target.file)) {
             stop("When Method = \"target\", a target file should be provided")
         }
         
-        Targets <- readMSL(file.name = target.file.name, path = path)
+        Targets <- readMSL(file.name = target.file, path = path)
         
         L <- length(Targets$compound)
         quantFrag <- rep(1, L)
@@ -24,15 +24,15 @@ getTarget <- function(Method = "target", target.file.name = character(),
     ## method = library
     else if (grepl("library", Method, ignore.case = TRUE)) {
         
-        if ((missing(library.file.name) & missing(Library)) | missing(target.table)) {
+        if ((missing(library.file) & missing(Library)) | missing(target.table)) {
             stop(paste("When Method = \"library\", a library file and a", 
                        "target.table should be provided!"))
         }
         #  optimization
         else {
             # check if library file is provided
-            if (!missing(library.file.name)) {
-                Library <- readMSL(file.name = library.file.name, 
+            if (!missing(library.file)) {
+                Library <- readMSL(file.name = library.file, 
                                     path = library.path, Save = FALSE)
             }
             # get the targets
@@ -44,7 +44,7 @@ getTarget <- function(Method = "target", target.file.name = character(),
     ## method = combined
     else if (grepl("combin", Method, ignore.case = TRUE)) {
         
-        if (missing(target.file.name) | (missing(library.file.name) & missing(Library))) {
+        if (missing(target.file) | (missing(library.file) & missing(Library))) {
             stop(paste("When Method = \"combined\", a target file and a library" 
                        , "file should be provided!"))
         }
@@ -52,13 +52,13 @@ getTarget <- function(Method = "target", target.file.name = character(),
         else {
         # read the library and the targets
             # check if library file is provided
-            if (length(library.file.name)) {
-                Library <- readMSL(file.name = library.file.name, 
+            if (!missing(target.file)) {
+                Library <- readMSL(file.name = library.file, 
                                    path = library.path, Save = FALSE)
             }
             
             # get the targets
-            Targets <- readMSL(file.name = target.file.name, path = path)
+            Targets <- readMSL(file.name = target.file, path = path)
             
             # optimize
             Targets <- optFrag(Targets = Targets, Library = Library,
@@ -73,8 +73,8 @@ getTarget <- function(Method = "target", target.file.name = character(),
     
     
     ## saving and returning the result
-    if (Save & length(target.file.name)) {
-        file.name <- paste(target.file.name, ".rds", sep = "")
+    if (Save & length(target.file)) {
+        file.name <- paste(target.file, ".rds", sep = "")
         saveRDS(Targets, file = file.name, compress = "xz")
     } 
     
