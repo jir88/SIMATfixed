@@ -1,7 +1,7 @@
 Package: SIMAT
 Type: Package
 Title: GC-SIM-MS data processing and alaysis tool
-Version: 1.15.0
+Version: 1.15.1
 Date: 2018-08-02
 Author: M. R. Nezami Ranjbar <nranjbar@vt.edu>
 Maintainer: M. R. Nezami Ranjbar <nranjbar@vt.edu>
@@ -10,5 +10,5 @@ Imports: mzR, ggplot2, grid, reshape2, grDevices, stats, utils
 Suggests: RUnit, BiocGenerics
 Description: This package provides a pipeline for analysis of GC-MS data acquired in selected ion monitoring (SIM) mode. The tool also provides a guidance in choosing appropriate fragments for the targets of interest by using an optimization algorithm. This is done by considering overlapping peaks from a provided library by the user.
 License: GPL-2
-biocViews: Software, Metabolomics, MassSpectrometry
+biocViews: ImmunoOncology, Software, Metabolomics, MassSpectrometry
 URL: http://omics.georgetown.edu/SIMAT.html
