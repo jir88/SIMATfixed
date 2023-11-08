@@ -84,7 +84,7 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
 
             dsPeaks[i] <- list(runPeaks)
 
-            cat(paste('\n\t', file.name[i], 'done.\n', sep = ' '))
+            message(paste('\n\t', file.name[i], 'done.\n', sep = ' '))
         }
 
         names(dsPeaks) <- file.name
