@@ -1,7 +1,7 @@
-## This function retrives the EIC of one peak in one run
+## This function retrieves the EIC of one peak in one run
 
-getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(), 
-                   sp0 = numeric(), rt0 = numeric(), drt = 10/60, dsc = 10/2, 
+getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
+                   sp0 = numeric(), rt0 = numeric(), drt = 10/60, dsc = 10/2,
                    ri0 = 0, weight = 2/3, deltaRI = 20, calibRI = NULL) {
     
     ## check if minimum required inputs are present
@@ -15,14 +15,17 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
         
         span <- 0.05
         t <- 1:length(x)
+        # smooth the EIC a little bit
         x <- suppressWarnings(loess(x ~ t, span = span)$fitted)
-        
+
+        # find indices where slope goes from positive to negative (peaks)
         pks <- which(diff(sign(diff(x,na.pad = FALSE)),na.pad = FALSE) < 0) + 2
-        
+
+        # if a threshold slope has been supplied
         if (!missing(Threshold)) {
-            pks <- pks[x[pks - 1] - x[pks] > Threshold]
-        } 
-        
+          # check slope between 1st and 2nd scans AFTER the apex
+            pks<- pks[x[pks - 1] - x[pks] > Threshold]
+        }
         for (i in 1:length(pks)) {
             pks[i] <- pks[i] - (delta + 1) + 
             which.max(x[max(1, pks[i] - delta):min(length(x), pks[i] + delta)])
