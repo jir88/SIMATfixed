@@ -101,7 +101,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
                       scoreApex = 0, scoreArea = 0)
       peakEIC$area <- 0
       peakEIC$EIC <- EIC
-      peakEIC$RT <- NA_real_
+      peakEIC$RT <- RT
       peakEIC$ms <- ms0
       peakEIC$sp <- sp0
       peakEIC$rt0 <- rt0
@@ -124,7 +124,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
                       scoreApex = 0, scoreArea = 0)
       peakEIC$area <- 0
       peakEIC$EIC <- EIC
-      peakEIC$RT <- NA_real_
+      peakEIC$RT <- RT
       peakEIC$ms <- ms0
       peakEIC$sp <- sp0
       peakEIC$rt0 <- rt0
