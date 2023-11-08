@@ -1,8 +1,8 @@
 Package: SIMAT
 Type: Package
-Title: GC-SIM-MS data processing and alaysis tool
-Version: 1.35.0
-Date: 2018-08-02
+Title: GC-SIM-MS data processing and analysis tool
+Version: 1.35.1
+Date: 2023-11-08
 Author: M. R. Nezami Ranjbar <nranjbar@vt.edu>
 Maintainer: M. R. Nezami Ranjbar <nranjbar@vt.edu>
 Depends: R (>= 3.5.0), Rcpp (>= 0.11.3)
