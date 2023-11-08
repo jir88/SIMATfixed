@@ -9,7 +9,8 @@
 \usage{
 getEIC(Run = list(), compound = "Analyte", ms0 = numeric(), sp0 = numeric(),
                    rt0 = numeric(), drt = 10/60, dsc = 10/2, ri0 = 0, 
-                   weight = 2/3, deltaRI = 20, calibRI = NULL)
+                   weight = 2/3, deltaRI = 20, calibRI = NULL,
+                   smooth_span = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -38,6 +39,8 @@ getEIC(Run = list(), compound = "Analyte", ms0 = numeric(), sp0 = numeric(),
     \item{weight}{a numeric value in [0,1] interval to calculated a combined weighted similarity scores based on Apex and area under EIC curve}
 
     \item{calibRI}{a function to calculate retention index based on RI calibration information, can be obtained by \code{getRI} function, optional. It is also used to estimate the retention time related to a retention index.}
+    
+    \item{smooth_span}{span to use for loess smoothing of individual EICs during peak detection. Keep this value low to avoid distorting peak shapes.}
 }
 
 \details{This function accepts several parameters including the expected retention, the mass and intensity of several fragments, the retention index of the peak, the extracted data from a raw netCDF file in peak table format, a certain range for searching the retention time, i.e. the retention time window, average half peak width. The function uses a similarity score based on a combined measure from spectral matching and RI similarity, if RI is available, and finds the most appropriate peak in considering the target information.

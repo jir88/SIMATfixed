@@ -9,7 +9,8 @@
 \usage{
 getPeak(Run = list(), file.name = character(), Targets = list(), 
             target.file.name = character(), drt = 10/60, dsc = 14/2, 
-                weight = 2/3, deltaRI = 20, calibRI = NULL, rt.sort = FALSE)
+                weight = 2/3, deltaRI = 20, calibRI = NULL, smooth_span = 0.05,
+                rt.sort = FALSE)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -31,6 +32,8 @@ getPeak(Run = list(), file.name = character(), Targets = list(),
     \item{deltaRI}{a numeric value for the penalty on the retention index similarity score.}
     
     \item{calibRI}{a function to calculate retention index based on RI calibration information, can be obtained by \code{getRI} function, optional.}
+    
+    \item{smooth_span}{span to use for loess smoothing of individual EICs during peak detection. Keep this value low to avoid distorting peak shapes.}
     
     \item{rt.sort}{a boolean value to sort the targets based on retention time before performing peak detection, optional}
 }

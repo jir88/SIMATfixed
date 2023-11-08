@@ -2,7 +2,7 @@
 
 getPeak <- function(Run = list(), file.name = character(), Targets = list(),
                     target.file.name = character(), drt = 10/60, dsc = 14/2,
-                    weight = 2/3, deltaRI = 20, calibRI = NULL,
+                    weight = 2/3, deltaRI = 20, calibRI = NULL, smooth_span = 0.05,
                     rt.sort = FALSE) {
 
     ## Initialization
@@ -78,7 +78,7 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
                                   ms0 = ms[[j]], sp0 = sp[[j]], rt0 = rt[j],
                                   drt = drt, dsc = dsc, ri0 = ri[j],
                                   weight = weight, deltaRI = deltaRI,
-                                  calibRI = calibRI)
+                                  calibRI = calibRI, smooth_span = smooth_span)
                 runPeaks[j] <- list(peakEIC)
             }
 
@@ -98,7 +98,7 @@ getPeak <- function(Run = list(), file.name = character(), Targets = list(),
                               ms0 = ms[[j]], sp0 = sp[[j]], rt0 = rt[j],
                               drt = drt, dsc = dsc, ri0 = ri[j],
                               weight = weight, deltaRI = deltaRI,
-                              calibRI = calibRI)
+                              calibRI = calibRI, smooth_span = smooth_span)
             runPeaks[j] <- list(peakEIC)
         }
 

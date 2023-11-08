@@ -2,7 +2,8 @@
 
 getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
                    sp0 = numeric(), rt0 = numeric(), drt = 10/60, dsc = 10/2,
-                   ri0 = 0, weight = 2/3, deltaRI = 20, calibRI = NULL) {
+                   ri0 = 0, weight = 2/3, deltaRI = 20, calibRI = NULL,
+                   smooth_span = 0.05) {
 
   ## check if minimum required inputs are present
   if (missing(Run) | missing(ms0) | missing(sp0) | missing(rt0)) {
@@ -17,18 +18,21 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
   # delta: 
   findPeaks <- function (x, rt_idx, Threshold = 0, delta = 3) {
 
-        span <- 0.05
+        # span <- 0.05
         t <- 1:length(x)
         # smooth the EIC a little bit
-        x <- suppressWarnings(loess(x ~ t, span = span)$fitted)
+        x_smooth <- suppressWarnings(loess(x ~ t, span = smooth_span)$fitted)
+        if(any(is.nan(x_smooth))) {
+          stop("EIC smoothing generated NaNs! Span is too small.")
+        }
 
         # find indices where slope goes from positive to negative (peaks)
-        pks <- which(diff(sign(diff(x,na.pad = FALSE)),na.pad = FALSE) < 0) + 2
+        pks <- which(diff(sign(diff(x_smooth,na.pad = FALSE)),na.pad = FALSE) < 0) + 2
 
         # if a threshold slope has been supplied
         if (!missing(Threshold)) {
           # check slope between 1st and 2nd scans AFTER the apex
-            pks<- pks[x[pks - 1] - x[pks] > Threshold]
+            pks<- pks[x_smooth[pks - 1] - x_smooth[pks] > Threshold]
         }
         # if we didn't find any peaks
         if(length(pks) == 0) {
@@ -39,7 +43,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
 
         for (i in 1:length(pks)) {
             pks[i] <- pks[i] - (delta + 1) +
-            which.max(x[max(1, pks[i] - delta):min(length(x), pks[i] + delta)])
+            which.max(x_smooth[max(1, pks[i] - delta):min(length(x_smooth), pks[i] + delta)])
         }
 
         return(pks)
@@ -95,7 +99,7 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
     # if the quantifier mass was never scanned, return a blank EIC
     if(diff(range(EIC)) == 0) {
       warning(paste0("\"", compound, "\" quantifier fragment ", ms0[1],
-                     " m/z not found in file: ", Run$file.name))
+                     " m/z not found in file: ", Run$file.name, "\n"))
       ## create the output object as a data frame
       peakEIC <- list(rtApex = NA_real_, intApex = NA_real_, RI = NA_real_,
                       scoreApex = 0, scoreArea = 0)
