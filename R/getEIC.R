@@ -77,6 +77,25 @@ getEIC <- function(Run = list(), compound = "Analyte", ms0 = numeric(),
     # extract scans and their mass and intensities from the run
     p <- scans[sc]
 
+    # if no scans are within the RT window, return a blank EIC
+    if(length(sc) == 0) {
+      warning(paste0("\"", compound, "\" expected retention time ", expRT,
+                     " min. outside retention time range in file: ", Run$file.name, "\n"))
+      ## create the output object as a data frame
+      peakEIC <- list(rtApex = NA_real_, intApex = NA_real_, RI = NA_real_,
+                      scoreApex = 0, scoreArea = 0)
+      peakEIC$area <- 0
+      peakEIC$EIC <- matrix(0, nrow = length(ms0), ncol = length(sc))
+      peakEIC$RT <- RT
+      peakEIC$ms <- ms0
+      peakEIC$sp <- sp0
+      peakEIC$rt0 <- rt0
+      peakEIC$ri0 <- ri0
+      peakEIC$compound <- compound
+      
+      # return the output object
+      return(peakEIC)
+    }
 
     ## peak detection
     # initial values
